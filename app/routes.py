@@ -32,9 +32,11 @@ def locations():
         {
             'id': result['id'],
             'filename': result['filename'],
+            'customer_id': result['customer_id'],
             'datetime': result['datetime'],
-            'latitude': float(result['lat'].strip('\"')),
-            'longitude': float(result['long'].strip('\"')),
+            'latitude': float(result['lat'].strip('"')),
+            'longitude': float(result['long'].strip('"')),
             'result': result['result']
         } for result in image_results
     ])
+

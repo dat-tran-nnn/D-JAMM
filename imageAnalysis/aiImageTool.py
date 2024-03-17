@@ -4,7 +4,7 @@ import re
 import json
 from openai import OpenAI
 
-client = OpenAI(api_key="")
+client = OpenAI(api_key="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")
 
 directory = "/Users/james/Dev/Fun/Hackathon24/cherryPickedImages"
 db_file = "output.db"
@@ -16,6 +16,7 @@ cursor.execute("""
     CREATE TABLE IF NOT EXISTS image_results (
         id INTEGER PRIMARY KEY,
         filename TEXT,
+        customer_id TEXT,
         datetime TEXT,
         lat TEXT,
         long TEXT,
@@ -68,6 +69,7 @@ for filename in os.listdir(directory):
                 for line in open("/Users/james/Dev/Fun/Hackathon24/hackathon2024/csv-dataset/msjob_pod.csv"):
                     line = line.split(',')
                     csv_filename = line[5]
+                    customer_id = line[1]
                     lat = line[7]
                     longitude = line[8]
                     datetime = line[6]
@@ -76,9 +78,9 @@ for filename in os.listdir(directory):
                         break 
 
                 cursor.execute("""
-                    INSERT INTO image_results (filename, datetime, lat, long, result)
-                    VALUES (?, ?, ?, ?, ?)
-                """, (filename, datetime, lat, longitude, json_content))
+                    INSERT INTO image_results (filename, customer_id, datetime, lat, long, result)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                """, (filename, customer_id, datetime, lat, longitude, json_content))
                 conn.commit()
 
     except Exception as e:
