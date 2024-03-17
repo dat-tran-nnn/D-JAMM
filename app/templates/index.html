@@ -2,94 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Map Display</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-          crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-            crossorigin=""></script>
-    <style>
-        #map { height: 500px; }
-        #search-container { margin-top: 10px; }
-        .marker-icon {
-            border-radius: 50%;
-            border: 2px solid white;
-        }
-        .green-icon { background-color: green; }
-        .red-icon { background-color: red; }
-        .yellow-icon { background-color: yellow; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zone Sleuth - Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}" />
 </head>
 <body>
-<div id="map"></div>
-<div id="search-container">
-    <form action="#" onsubmit="searchMarkers(event)">
-        <input type="search" id="searchInput" placeholder="Search by Customer/Job Id">
-        <button type="submit">Search</button>
-    </form>
-</div>
+    <div class="navbar">
+        <!-- <h1>Zone Sleuth</h1> -->
+        <img class="titleLogo" src="static/imgs/mvp1.png" alt="Zone Sleuth Logo and text" />
+    </div>
+    <p></p>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div id="map"></div>
+            </div>
+            <div class="col-md-6" id="searchArea">
+                <input type="search" id="searchBar" placeholder="Search Customers"></input>
+                <button class="searchButton" id="submitButton">Search</button>
+                <button class="searchButton" id="clearButton">Clear</button>
+                <div id="resultsArea"><!-- Cards will appear here --></div>
+            </div>
+        </div>
+        <p>A Hackathon project powered by Allotrac</p>
+    </div>
 
-<script>
-    var markers = []; // Store all markers
-    var locations = []; // Store all locations data
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.7.12/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <!-- Site JS -->
+    <script src="{{ url_for('static', filename='js/siteScript.js') }}"></script>
 
-    // Map Setup
-    var map = L.map('map').setView([-33.9124212, 150.8265563], 7);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap'
-    }).addTo(map);
-
-    // Fetch locations from the server
-    fetch('/locations')
-        .then(response => response.json())
-        .then(data => {
-            locations = data; // Store the data in the global variable
-            locations.forEach((location, i) => {
-                var result = JSON.parse(location.result);
-                var iconClass = 'green-icon'; // Default color
-                if (result.damaged_containers > 0) {
-                    iconClass = 'red-icon';
-                } else if (result.overflowing_containers > 0) {
-                    iconClass = 'yellow-icon';
-                }
-                var icon = L.divIcon({
-                    className: 'marker-icon ' + iconClass,
-                    iconSize: [10, 10]
-                });
-                var marker = L.marker([location.latitude, location.longitude], {icon: icon})
-                    .addTo(map)
-                    .bindPopup(
-                    "<b>Site " + (i + 1) + ":</b><br />" +
-                    "Job/Customer ID: " + location.customer_id + "<br />" +
-                    "Date: " + location.datetime.split(' ')[0] + "<br />" +
-                    "Time: " + location.datetime.split(' ')[1] + "<br /><br />" +
-                    "<b>Container info:</b><br />" +
-                    "Container total: " + result.total_containers + "<br />" +
-                    (result.overflowing_containers > 0 ? "Overflowed: " + result.overflowing_containers + "<br />" : "") +
-                    (result.damaged_containers > 0 ? "Mishandled: " + result.damaged_containers + "<br />" : "")
-                );
-                markers.push(marker); // Store the marker reference
-            });
-        });
-
-    // Search and filter markers
-    function searchMarkers(event) {
-        event.preventDefault(); // Prevent form submission
-        var searchInput = document.getElementById('searchInput').value;
-
-        // Hide all markers
-        markers.forEach(marker => marker.remove());
-
-        // Show markers that match the search input
-        locations.forEach((location, index) => {
-            if (location.customer_id === searchInput) {
-                markers[index].addTo(map);
-            }
-        });
-    }
-</script>
 </body>
 </html>
-`

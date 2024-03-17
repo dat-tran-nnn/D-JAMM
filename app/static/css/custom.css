@@ -1,0 +1,125 @@
+/* Custom CSS, should overwrite default styling */
+/* Default Types */
+:root {
+    /* color variables */
+    --allotrac-orange: #F57C00;
+    --allotrac-navy: #00263A;
+    --allotrac-bgblue: #DFE8F0;
+    --white: #FFFFFF;
+}
+
+body {
+    background-color: var(--allotrac-bgblue);
+}
+
+/* classes */
+
+.navbar{
+    background-color: var(--allotrac-orange);
+    align-items: center;
+    justify-content: center;
+}
+
+.titleLogo {
+    width: 200px;
+}
+
+.card {
+    background-color: var(--white);
+    height: 100px;
+    width: 90%;
+    outline: 2px solid var(--allotrac-navy);
+    display: flex;
+    justify-content: left;
+    align-items: left;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 5%;
+    margin-right: 5%;
+    border-radius: 10px;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.cardImage {
+    margin: 2.5%;
+    width: 100%;
+    max-height: 100%; /* Adjust the height as needed */
+    outline: 1px solid var(--allotrac-navy);
+    border-radius: 5px;
+    object-fit: cover; /* This will ensure the image covers the area without distorting its aspect ratio */
+    display: block;    /* Removes extra space below the image */
+}
+
+.searchResults{
+    display: grid;
+}
+
+.tableText {
+    margin-top: 2px;
+    margin-bottom: 1px;
+    margin-left: 3px;
+}
+
+
+.searchButton {
+    width: 12.5%;
+}
+
+/* Marker icon styles */
+.green-icon, .red-icon, .yellow-icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.green-icon {
+    background-color: green;
+}
+
+.red-icon {
+    background-color: red;
+}
+
+.yellow-icon {
+    background-color: yellow;
+}
+
+
+/* ids */
+
+#map {
+    border-radius: 10px;
+    height: 650px;
+}
+
+#searchArea {
+    background-color: var(--allotrac-navy);
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    height: 650px;
+}
+
+#searchBar {
+    margin-top: 20px;
+    margin-left: 10px;
+    min-width: 200px;
+    width: 60%;
+}
+
+#submitButton {
+    width: 15%;
+}
+
+#resultsArea {
+    background-color: var(--white);
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    height: 575px;
+    width: 100%;
+    border-radius: 10px;
+    overflow: auto;
+}
