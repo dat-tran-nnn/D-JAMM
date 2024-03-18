@@ -4,10 +4,11 @@ import re
 import json
 from openai import OpenAI
 
-client = OpenAI(api_key="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")
+client = OpenAI(api_key="")
 
-directory = "/Users/james/Dev/Fun/Hackathon24/cherryPickedImages"
-db_file = "output.db"
+
+directory = "/Users/james/Dev/Fun/Hackathon24/cherryPickedImages" #Directory containing images for searching
+db_file = "locationsFromDir.db" #The name of the sqlite3 db
 
 conn = sqlite3.connect(db_file)
 cursor = conn.cursor()
@@ -34,7 +35,7 @@ for filename in os.listdir(directory):
     try:
         if filename.endswith(".jpg"):
 
-            urlyay = "http://allotrac-hackathon-datasets.s3-website-ap-southeast-2.amazonaws.com/images/" + filename
+            imageURL = "http://allotrac-hackathon-datasets.s3-website-ap-southeast-2.amazonaws.com/images/" + filename
         
             response = client.chat.completions.create(
                 model="gpt-4-vision-preview",
@@ -46,13 +47,12 @@ for filename in os.listdir(directory):
                             {
                                 "type": "image_url",
                                 "image_url": {
-                                    "url": urlyay,
+                                    "url": imageURL,
                                 },
                             },
                         ],
                     }
                 ],
-                max_tokens=50,
             )
 
             input_string = response.choices[0].message.content
@@ -74,7 +74,7 @@ for filename in os.listdir(directory):
                     longitude = line[8]
                     datetime = line[6]
                     if filename == csv_filename:
-                        print("yay")
+                        print("Success: ", filename, " | ", customer_id, " | ", lat, " | ", longitude, " | ", datetime)
                         break 
 
                 cursor.execute("""
@@ -84,7 +84,7 @@ for filename in os.listdir(directory):
                 conn.commit()
 
     except Exception as e:
-            print("\nError")
+            print("\nError: ", e)
 
 cursor.close()
 conn.close()
